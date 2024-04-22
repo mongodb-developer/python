@@ -1,3 +1,5 @@
+![Best Practices for FastAPI & MongoDB](resources/header_image.png)
+
 # FastAPI Best Practices
 
 This is a very small project, demonstrating some best practices recommended for
