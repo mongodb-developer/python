@@ -49,12 +49,21 @@ $ python scripts/load_sample_data.py sample_data.json
 
 Once you've loaded in the sample data, you're ready to start the sample app!
 
-## Run the app
+## Run the apps
 
-The app implements a `main` function, so you can run it with the following shell command:
+There are two different apps, `service.py` that is written using Motor,
+and `service-beanie.py` that uses the [Beanie] ODM.
+
+Both apps implement a `main` function, so you can run them with the following shell commands:
 
 ```shell
+# You only need to run ONE of these...
+
+# Run the Motor app:
 python service.py
+
+# Run the Beanie app:
+python service-beanie.py
 ```
 
 If you navigate to http://localhost:8000/docs you should be able to explore the API from your browser.
@@ -68,4 +77,5 @@ Raise an issue describing your opinion, and we can discuss it.
 [direnv]: https://direnv.net/
 [envdir]: https://envdir.readthedocs.io/en/latest/usage.html
 [honcho]: https://honcho.readthedocs.io/en/latest/
+[Beanie]: https://beanie-odm.dev/
 [Best Practices for FastAPI and MongoDB]: https://example.net/

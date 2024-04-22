@@ -14,33 +14,31 @@ from pydantic import Field
 CONNECTION_STRING = os.environ["MONGODB_URI"]
 PROFILES_COLLECTION = "profiles"
 
-
-#   {
-#     "job": "Nurse, learning disability",
-#     "company": "Wood-Bartlett",
-#     "ssn": "211-17-0186",
-#     "residence": "83773 Nancy Port\nEast Coltonborough, MD 58656",
-#     "current_location": [
-#       { "$numberDouble": "-7.3013195" },
-#       { "$numberDouble": "-4.274565" }
-#     ],
-#     "blood_group": "AB+",
-#     "website": [
-#       "http://www.lara.com/",
-#       "http://cooley.biz/",
-#       "http://lopez.org/"
-#     ],
-#     "username": "rossmichele",
-#     "name": "Bridget Zavala",
-#     "sex": "F",
-#     "address": "114 Derek Trafficway\nLake Sarah, WI 86822",
-#     "mail": "jonesbrenda@yahoo.com",
-#     "birthdate": { "$date": { "$numberLong": "-1406592000000" } },
-#     "_id": "profile-1"
-#   },
+EXAMPLE_PROFILE = {
+    "_id": "profile-12",
+    "job": "Research officer, trade union",
+    "company": "Brown PLC",
+    "ssn": "636-75-3518",
+    "residence": "3409 Robinson Harbor\nNorth Monica, HI 17943",
+    "current_location": [89.371661, -102.604933],
+    "blood_group": "AB+",
+    "website": ["http://carlson.com/", "https://www.dougherty.info/"],
+    "username": "terry53",
+    "name": "Whitney Davis",
+    "sex": "F",
+    "address": "3874 Brittany Rue Apt. 447\nWest Amber, AK 09494",
+    "mail": "ztorres@hotmail.com",
+    "birthdate": "1987-07-19T00:00:00",
+}
 
 
 class Profile(Document):
+    """
+    A profile for a single user.
+
+    Contains some useful information about a person.
+    """
+
     id: Optional[str] = Field(default=None, description="MongoDB document ObjectID")
     username: str
     name: str
@@ -57,6 +55,7 @@ class Profile(Document):
     website: List[str]
 
     class Settings:
+        # The name of the collection to store these objects.
         name = "profiles"
 
 
@@ -91,11 +90,31 @@ async def db_lifespan(app: FastAPI):
 
 
 # Create an app - notice the lifespan that's defined above.
-app: FastAPI = FastAPI(lifespan=db_lifespan)
+app: FastAPI = FastAPI(
+    lifespan=db_lifespan,
+    title="Best Practices with FastAPI & Beanie",
+    description="""
+This is a sample application that demonstrates some best practices when building an application with FastAPI and MongoDB, using the Beanie ODM library.
+
+## Endpoints
+
+This sample application only supports a single endpoint:
+
+* **Get Profile**:  `/profiles/{profile_id}`
+""",
+)
 
 
-@app.get("/people/{profile_id}")
-async def read_item(profile_id: str) -> Profile:
+@app.get(
+    "/profiles/{profile_id}",
+    responses={
+        200: {
+            "description": "Profile requested by ID",
+            "content": {"application/json": {"example": EXAMPLE_PROFILE}},
+        },
+    },
+)
+async def get_profile(profile_id: str) -> Profile:
     """
     Look up a single profile by ID.
 
