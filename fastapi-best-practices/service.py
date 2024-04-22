@@ -7,7 +7,7 @@ from datetime import datetime
 import os
 import logging
 from logging import info
-from typing import Annotated, Any, List, Mapping, Optional
+from typing import Any, List, Mapping, Optional
 
 from fastapi import FastAPI, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
